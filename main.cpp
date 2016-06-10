@@ -10,7 +10,7 @@ const int LEMON_SDL_ERROR = 1;
 
 int main(int argc, char** argv)
 {
-    conf config("./settings.ini");
+    controller control("./settings.ini");
 
     SDL_Window* window = NULL;
 
