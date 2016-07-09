@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "conf.h"
-#include "SDLInterface.h"
+#include "SDL_interface.h"
 #include <string>
 
 class controller{
@@ -11,7 +11,11 @@ class controller{
     ~controller();
 
     int loop();
+    int exit();
   private:
+    int loopState;
+    int SDLState;
+
     conf* config;
     SDLInterface* SDL;
 };
