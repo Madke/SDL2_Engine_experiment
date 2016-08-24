@@ -2,8 +2,9 @@
 
 const int LEMON_SDL_ERROR = 1;
 
-SDLInterface::SDLInterface(Config* config) {
+SDLInterface::SDLInterface(Config* config, Controller* controller) {
     m_config = config;
+    m_controller = controller;
     init();
 }
 
@@ -30,11 +31,13 @@ void SDLInterface::init() {
 
     m_screenSurface = SDL_GetWindowSurface(m_window);
 
-    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, 0xFF, 0xFF, 0xFF));
+    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, 0x00, 0x00, 0x00));
 }
 
 int SDLInterface::tick() {
-    SDL_Delay(2000);
+    SDL_Delay(m_controller->timeLeft());
+    int backColour = m_controller->getBackColour();
+    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, backColour, backColour, backColour));
     return 1;
 }
 

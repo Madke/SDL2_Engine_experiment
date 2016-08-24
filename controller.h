@@ -5,16 +5,25 @@
 #include "SDL_interface.h"
 #include <string>
 
-class controller{
+class conf;
+class SDLInterface;
+
+class controller
+{
   public:
     controller(std::string);
     ~controller();
 
     int loop();
     int exit();
+
+    unsigned short int getBackColour();
+    unsigned int timeLeft();
   private:
     int loopState;
     int SDLState;
+
+    unsigned short int backColour;
 
     conf* config;
     SDLInterface* SDL;

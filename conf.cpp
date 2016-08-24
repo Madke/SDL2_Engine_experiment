@@ -31,6 +31,10 @@ conf::conf(string path) : m_path(path), m_width(640), m_height(480)
                 sin >> m_icon;
                 addLog(m_icon, "icon");
             }
+            else if (configLine.find("FPS") != string::npos) {
+                sin >> m_FPS;
+                addLog(m_FPS, "FPS");
+            }
         }
     configFile.close();
 }
@@ -46,6 +50,10 @@ unsigned int conf::height() {
 
 unsigned int conf::width() {
     return this->m_width;
+}
+
+unsigned int conf::fps() {
+    return this->m_FPS;
 }
 
 string conf::path() {
@@ -71,4 +79,3 @@ void conf::addLog(int msg, string type) {
 void conf::addLog(string msg) {
     m_log << msg << endl;
 }
-

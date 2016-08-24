@@ -13,6 +13,7 @@ class conf
 
         unsigned int    width();
         unsigned int    height();
+        unsigned int    fps();
         std::string     path();
         std::string     icon();
 
@@ -28,6 +29,7 @@ class conf
         std::string     m_icon;
         unsigned int    m_width;
         unsigned int    m_height;
+        unsigned int    m_FPS;
 };
 
 #endif // CONF_H
