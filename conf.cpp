@@ -76,6 +76,10 @@ void conf::addLog(int msg, string type) {
     m_log << type << ": " << msg << endl;
 }
 
+void conf::addLog(unsigned int msg, string type) {
+    m_log << type << ": " << msg << endl;
+}
+
 void conf::addLog(string msg) {
     m_log << msg << endl;
 }

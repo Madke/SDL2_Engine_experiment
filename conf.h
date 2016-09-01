@@ -20,6 +20,7 @@ class conf
         void addLog(std::string);
         void addLog(std::string, std::string);
         void addLog(int, std::string);
+        void addLog(unsigned int, std::string);
 
         void warn(std::string);
 

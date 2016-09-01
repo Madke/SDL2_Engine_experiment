@@ -3,13 +3,15 @@
 
 #include "conf.h"
 #include "controller.h"
-#include<SDL2/SDL.h>
+#include <SDL2/SDL.h>
 
 class controller;
 class conf;
 
 typedef SDL_Window Window;
+typedef SDL_Renderer Renderer;
 typedef SDL_Surface Surface;
+
 typedef conf Config;
 typedef controller Controller;
 
@@ -30,6 +32,7 @@ class SDLInterface
         int getError();
     private:
         Window* m_window;
+        Renderer* m_renderer;
         Surface* m_screenSurface;
 
         Config* m_config;

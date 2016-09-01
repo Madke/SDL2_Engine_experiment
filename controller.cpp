@@ -8,6 +8,7 @@ controller::controller(string pathToConfig) {
     SDL = new SDLInterface(config, this);
 
     loopState = 1;
+    oldTicks = 0;
 
     config->addLog("Controller online.", "Controller");
 }
@@ -33,8 +34,10 @@ int controller::exit() {
     return loopState;
 }
 
-unsigned int controller::timeLeft() {
+unsigned int controller::timeLeft(unsigned int tick) {
     int target = (1000/config->fps());
-    int timeElapsed = 0;
-    return (target - timeElapsed);
+    int timeElapsed = (tick > oldTicks) ? tick - oldTicks : 0;
+    oldTicks = tick;
+    config->addLog(tick, "tick");
+    return (target > timeElapsed) ? target - timeElapsed : 0;
 }

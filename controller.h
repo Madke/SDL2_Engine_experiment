@@ -17,10 +17,12 @@ class controller
     int loop();
     int exit();
 
-    unsigned int timeLeft();
+    unsigned int timeLeft(unsigned int);
   private:
     int loopState;
     int SDLState;
+
+    int oldTicks;
 
     conf* config;
     SDLInterface* SDL;
