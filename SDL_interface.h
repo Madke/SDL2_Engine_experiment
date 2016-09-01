@@ -20,7 +20,11 @@ class SDLInterface
         ~SDLInterface();
 
         void init();
-        int tick();
+        int tick(int);
+
+        int fadeIn(float);
+        int fadeOut(float);
+
         void updateWindow();
 
         int getError();
@@ -30,5 +34,7 @@ class SDLInterface
 
         Config* m_config;
         Controller* m_controller;
+
+        unsigned short int backColour;
 };
 #endif //SDL_INTERFACE_H

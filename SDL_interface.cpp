@@ -16,6 +16,8 @@ SDLInterface::~SDLInterface() {
 void SDLInterface::init() {
     if(SDL_Init( SDL_INIT_VIDEO) < 0) throw LEMON_SDL_ERROR;
 
+    backColour = 0x00;
+
     m_config->warn("Setting up SDL window with parameters");
     m_config->addLog(m_config->width(), "width");
     m_config->addLog(m_config->height(), "height");
@@ -31,14 +33,38 @@ void SDLInterface::init() {
 
     m_screenSurface = SDL_GetWindowSurface(m_window);
 
-    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, 0x00, 0x00, 0x00));
+    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, backColour, backColour, backColour));
 }
 
-int SDLInterface::tick() {
+int SDLInterface::tick(int stage) {
     SDL_Delay(m_controller->timeLeft());
-    int backColour = m_controller->getBackColour();
+
+    switch(stage) {
+        case 1:
+        return fadeIn(2.0);
+        case 2:
+        return fadeOut(2.0);
+        default:
+        return 0;
+    }
+}
+
+int SDLInterface::fadeIn(float time) {
+    short int delta = 256.0 / ( time * m_config->fps());
+    if(backColour > 0xFF - delta) backColour = 0xFF - delta;
+    backColour += delta;
     SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, backColour, backColour, backColour));
+    if(backColour == 0xFF) return 2;
     return 1;
+}
+
+int SDLInterface::fadeOut(float time) {
+    short int delta = 256.0 / ( time * m_config->fps());
+    if(backColour < delta) backColour = delta;
+    backColour -= delta;
+    SDL_FillRect(m_screenSurface, NULL, SDL_MapRGB( m_screenSurface->format, backColour, backColour, backColour));
+    if(backColour == 0x00) return 1;
+    return 2;
 }
 
 void SDLInterface::updateWindow() {

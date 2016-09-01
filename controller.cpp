@@ -7,7 +7,7 @@ controller::controller(string pathToConfig) {
     config = new conf(pathToConfig);
     SDL = new SDLInterface(config, this);
 
-    backColour = 0;
+    loopState = 1;
 
     config->addLog("Controller online.", "Controller");
 }
@@ -19,11 +19,9 @@ controller::~controller() {
 
 int controller::loop() {
     try {
-        backColour++;
-        SDLState = SDL->tick();
+        SDLState = SDL->tick(loopState);
         SDL->updateWindow();
-        if(SDLState == 1) loopState = 1;
-        if(backColour == 0xFF) loopState = 0;
+        loopState = SDLState;
     }
     catch (int err) {
         loopState = SDL->getError();
@@ -33,10 +31,6 @@ int controller::loop() {
 
 int controller::exit() {
     return loopState;
-}
-
-unsigned short int controller::getBackColour() {
-    return backColour;
 }
 
 unsigned int controller::timeLeft() {

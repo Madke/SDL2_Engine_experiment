@@ -17,13 +17,10 @@ class controller
     int loop();
     int exit();
 
-    unsigned short int getBackColour();
     unsigned int timeLeft();
   private:
     int loopState;
     int SDLState;
-
-    unsigned short int backColour;
 
     conf* config;
     SDLInterface* SDL;
