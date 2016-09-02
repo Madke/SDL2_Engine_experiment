@@ -7,7 +7,7 @@ controller::controller(string pathToConfig) {
     config = new conf(pathToConfig);
     SDL = new SDLInterface(config, this);
 
-    loopState = 1;
+    loopState = STATE_FADE_IN;
     oldTicks = 0;
 
     config->addLog("Controller online.", "Controller");
@@ -20,12 +20,15 @@ controller::~controller() {
 
 int controller::loop() {
     try {
+        int oldState = loopState;
         SDLState = SDL->tick(loopState);
         SDL->updateWindow();
-        loopState = SDLState;
+        loopState = (loopState == oldState)? SDLState : loopState;
     }
     catch (int err) {
-        loopState = SDL->getError();
+        if(err == LEMON_SDL_ERROR)
+          loopState = SDL->getError();
+        else loopState = STATE_BLANK;
     }
     return loopState;
 }
@@ -38,6 +41,5 @@ unsigned int controller::timeLeft(unsigned int tick) {
     int target = (1000/config->fps());
     int timeElapsed = (tick > oldTicks) ? tick - oldTicks : 0;
     oldTicks = tick;
-    config->addLog(tick, "tick");
     return (target > timeElapsed) ? target - timeElapsed : 0;
 }

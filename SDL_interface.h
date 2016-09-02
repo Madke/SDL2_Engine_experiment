@@ -22,10 +22,11 @@ class SDLInterface
         ~SDLInterface();
 
         void init();
-        int tick(int);
+        int tick(int&);
 
-        int fadeIn(float);
-        int fadeOut(float);
+        int fadeIn(float, int&);
+        int fadeOut(float, int&);
+        void wait(float, int&, int);
 
         void updateWindow();
 

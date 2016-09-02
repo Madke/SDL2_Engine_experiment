@@ -6,7 +6,7 @@
 
 using namespace std;
 
-conf::conf(string path) : m_path(path), m_width(640), m_height(480)
+conf::conf(string path) : m_path(path), m_width(640), m_height(480), m_FPS(60)
 {
     ifstream configFile;
     string configLine;

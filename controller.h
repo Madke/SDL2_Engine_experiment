@@ -5,6 +5,18 @@
 #include "SDL_interface.h"
 #include <string>
 
+enum State {
+    STATE_EXIT = 0,
+    STATE_FADE_IN,
+    STATE_FADE_OUT,
+    STATE_WAIT,
+    STATE_BLANK = 255
+};
+
+enum LemonError {
+    LEMON_SDL_ERROR
+};
+
 class conf;
 class SDLInterface;
 
