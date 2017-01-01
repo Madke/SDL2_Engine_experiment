@@ -10,6 +10,7 @@ enum State {
     STATE_FADE_IN,
     STATE_FADE_OUT,
     STATE_WAIT,
+    STATE_MAIN,
     STATE_BLANK = 255
 };
 
@@ -28,6 +29,8 @@ class controller
 
     int loop();
     int exit();
+
+    void input(char);
 
     unsigned int timeLeft(unsigned int);
   private:

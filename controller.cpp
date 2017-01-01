@@ -7,7 +7,7 @@ controller::controller(string pathToConfig) {
     config = new conf(pathToConfig);
     SDL = new SDLInterface(config, this);
 
-    loopState = STATE_FADE_IN;
+    loopState = STATE_MAIN;
     oldTicks = 0;
 
     config->addLog("Controller online.", "Controller");
@@ -27,7 +27,7 @@ int controller::loop() {
     }
     catch (int err) {
         if(err == LEMON_SDL_ERROR)
-          loopState = SDL->getError();
+          loopState = STATE_EXIT;
         else loopState = STATE_BLANK;
     }
     return loopState;
@@ -35,6 +35,12 @@ int controller::loop() {
 
 int controller::exit() {
     return loopState;
+}
+
+void controller::input(char input) {
+    if (input == '\033') {
+        loopState = STATE_FADE_OUT;
+    }
 }
 
 unsigned int controller::timeLeft(unsigned int tick) {

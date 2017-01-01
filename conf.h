@@ -17,6 +17,9 @@ class conf
         std::string     path();
         std::string     icon();
 
+        const char*     vertexShader();
+        const char*     fragmentShader();
+
         void addLog(std::string);
         void addLog(std::string, std::string);
         void addLog(int, std::string);
@@ -31,6 +34,9 @@ class conf
         unsigned int    m_width;
         unsigned int    m_height;
         unsigned int    m_FPS;
+
+        std::string     m_vertexShader;
+        std::string     m_fragmentShader;
 };
 
 #endif // CONF_H
