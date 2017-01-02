@@ -90,7 +90,7 @@ const char* conf::vertexShader() {
 }
 
 const char* conf::fragmentShader() {
-    const char* file = (this->m_vertexShader).c_str();
+    const char* file = (this->m_fragmentShader).c_str();
     return file;
 }
 

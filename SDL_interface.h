@@ -4,6 +4,7 @@
 #include "conf.h"
 #include "controller.h"
 #include "glad.h"
+#include "glcontroller.h"
 #include <SDL2/SDL.h>
 
 class controller;
@@ -16,6 +17,7 @@ typedef SDL_GLContext GLContext;
 
 typedef conf Config;
 typedef controller Controller;
+typedef openGL OpenGL;
 
 class SDLInterface
 {
@@ -46,7 +48,8 @@ class SDLInterface
 
         Config* m_config;
         Controller* m_controller;
+        OpenGL* m_openGL;
 
-        GLfloat backColour;
+        float backColour;
 };
 #endif //SDL_INTERFACE_H

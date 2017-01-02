@@ -1,4 +1,4 @@
-OBJS =  glad.c main.cpp conf.cpp controller.cpp SDL_interface.cpp
+OBJS =  glad.c main.cpp conf.cpp controller.cpp glcontroller.cpp SDL_interface.cpp
 
 OBJ_NAME = engine.app
 
