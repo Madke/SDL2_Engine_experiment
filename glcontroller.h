@@ -11,15 +11,16 @@ class openGL {
 public:
   openGL(Config *);
   ~openGL();
+
+  void init(){};
+
   void addVertexShader(const char *);
   void addFragmentShader(const char *);
   void compileProgram();
 
-  void addTriangle(float *);
+  void addTriangle(float *, unsigned int);
 
   void draw();
-
-private:
   Config *m_config;
 
   GLuint VBO;

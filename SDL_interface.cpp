@@ -35,7 +35,7 @@ void SDLInterface::init() {
 
   SDL_GL_SetSwapInterval(1);
 
-  SDL_GL_LoadLibrary(NULL);
+  SDL_GL_LoadLibrary(nullptr);
 
   m_window = SDL_CreateWindow("Ketan is your lord now, computer.",
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -58,7 +58,7 @@ void SDLInterface::init() {
   glClearColor(backColour, backColour, backColour, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // m_openGL = new OpenGL(m_config);
+  m_openGL = new OpenGL(m_config);
 
   // m_openGL->init();
 
@@ -67,26 +67,14 @@ void SDLInterface::init() {
 
   const char *vsSource = m_config->vertexShader();
   const char *fsSource = m_config->fragmentShader();
-  // m_openGL->addVertexShader(vsSource);
-  // m_openGL->addFragmentShader(fsSource);
+  m_openGL->addVertexShader(vsSource);
+  m_openGL->addFragmentShader(fsSource);
   // m_openGL->compileProgram();
-
-  // m_openGL->addTriangle(initTriangle);
-  // m_openGL->draw();
 
   // SDL_SetRenderDrawColor(m_renderer, backColour, backColour, backColour,
   // 255);
   // SDL_RenderFillRect(m_renderer, nullptr);
-
-  GLuint vertexBuffer;
-  glGenBuffers(1, &vertexBuffer);
-  glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  GLuint VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
+  /*
   GLuint vertexShader;
   vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -98,6 +86,10 @@ void SDLInterface::init() {
 
   glShaderSource(fragmentShader, 1, &fsSource, nullptr);
   glCompileShader(fragmentShader);
+  */
+
+  GLuint vertexShader = m_openGL->vertexShader;
+  GLuint fragmentShader = m_openGL->fragmentShader;
 
   GLuint shaderProgram;
   shaderProgram = glCreateProgram();
@@ -105,26 +97,12 @@ void SDLInterface::init() {
   glAttachShader(shaderProgram, fragmentShader);
   glLinkProgram(shaderProgram);
 
-  GLint success;
-  GLchar infoLog[2048];
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram, 2048, NULL, infoLog);
-    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-              << infoLog << std::endl;
-  }
-
-  glGetShaderSource(fragmentShader, 2048, nullptr, infoLog);
-  std::cout << "fs:" << std::endl << infoLog;
-
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
-  glEnableVertexAttribArray(0);
-
-  glUseProgram(shaderProgram);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  m_openGL->shaderProgram = shaderProgram;
+  m_openGL->addTriangle(initTriangle, 9);
+  m_openGL->draw();
 }
 
 int SDLInterface::tick(int &state) {
@@ -159,7 +137,10 @@ int SDLInterface::tick(int &state) {
   }
 }
 
-int SDLInterface::draw() { return STATE_MAIN; }
+int SDLInterface::draw() {
+  // m_openGL->draw();
+  return STATE_MAIN;
+}
 
 int SDLInterface::fadeIn(float time, int &state) {
   float delta = 0.8 / (time * m_config->fps());
