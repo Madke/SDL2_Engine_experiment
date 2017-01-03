@@ -20,14 +20,13 @@ void openGL::addVertexShader(const char *source) {
   GLint success;
   GLchar infoLog[2048];
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (true) {
+  if (!success) {
     glGetShaderInfoLog(vertexShader, 2048, NULL, infoLog);
     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
               << infoLog << std::endl;
+    glGetShaderSource(vertexShader, 2048, nullptr, infoLog);
+    std::cout << "vs:______________________" << std::endl << infoLog;
   }
-
-  glGetShaderSource(vertexShader, 2048, nullptr, infoLog);
-  std::cout << "vs:______________________" << std::endl << infoLog;
 }
 void openGL::addFragmentShader(const char *source) {
   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -38,17 +37,15 @@ void openGL::addFragmentShader(const char *source) {
   GLint success;
   GLchar infoLog[2048];
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (true) {
+  if (!success) {
     glGetShaderInfoLog(fragmentShader, 2048, NULL, infoLog);
     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
               << infoLog << std::endl;
+    glGetShaderSource(fragmentShader, 2048, nullptr, infoLog);
+    std::cout << "fs:______________________" << std::endl << infoLog;
   }
-
-  glGetShaderSource(fragmentShader, 2048, nullptr, infoLog);
-  std::cout << "fs:______________________" << std::endl << infoLog;
 }
 void openGL::compileProgram() {
-  GLuint shaderProgram;
   shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
@@ -60,7 +57,7 @@ void openGL::compileProgram() {
   GLint success;
   GLchar infoLog[2048];
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (true) {
+  if (!success) {
     glGetProgramInfoLog(shaderProgram, 2048, NULL, infoLog);
     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
               << infoLog << std::endl;

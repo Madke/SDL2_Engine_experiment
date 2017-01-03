@@ -69,40 +69,8 @@ void SDLInterface::init() {
   const char *fsSource = m_config->fragmentShader();
   m_openGL->addVertexShader(vsSource);
   m_openGL->addFragmentShader(fsSource);
-  // m_openGL->compileProgram();
-
-  // SDL_SetRenderDrawColor(m_renderer, backColour, backColour, backColour,
-  // 255);
-  // SDL_RenderFillRect(m_renderer, nullptr);
-  /*
-  GLuint vertexShader;
-  vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-  glShaderSource(vertexShader, 1, &vsSource, nullptr);
-  glCompileShader(vertexShader);
-
-  GLuint fragmentShader;
-  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-  glShaderSource(fragmentShader, 1, &fsSource, nullptr);
-  glCompileShader(fragmentShader);
-  */
-
-  GLuint vertexShader = m_openGL->vertexShader;
-  GLuint fragmentShader = m_openGL->fragmentShader;
-
-  GLuint shaderProgram;
-  shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
-  m_openGL->shaderProgram = shaderProgram;
+  m_openGL->compileProgram();
   m_openGL->addTriangle(initTriangle, 9);
-  m_openGL->draw();
 }
 
 int SDLInterface::tick(int &state) {
@@ -138,7 +106,7 @@ int SDLInterface::tick(int &state) {
 }
 
 int SDLInterface::draw() {
-  // m_openGL->draw();
+  m_openGL->draw();
   return STATE_MAIN;
 }
 
@@ -154,8 +122,8 @@ int SDLInterface::fadeIn(float time, int &state) {
   glClearColor(backColour, backColour, backColour, backColour);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  m_openGL->draw();
   if (backColour >= 0.8) {
-    // wait(2.0, state, STATE_FADE_OUT);
     return STATE_MAIN;
   }
   return STATE_FADE_IN;
@@ -174,8 +142,8 @@ int SDLInterface::fadeOut(float time, int &state) {
   glClearColor(backColour, backColour, backColour, backColour);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  m_openGL->draw();
   if (backColour <= delta) {
-    // wait(2.0, state, STATE_FADE_IN);
     return STATE_EXIT;
   }
   return STATE_FADE_OUT;
