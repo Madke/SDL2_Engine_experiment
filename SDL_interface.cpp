@@ -2,6 +2,10 @@
 
 // debug
 #include <iostream>
+float initTriangle[] = {0.0,     1.0, 0.0, -2.0 / 3, 0.0,  0.0,
+                        2.0 / 3, 0.0, 0.0, 0.0,      -1.0, 0.0};
+float finalTriangle[] = {0.0, 2.0 / 3, 0.0, -1.0, 0.0,      0.0,
+                         1.0, 0.0,     0.0, 0.0,  -2.0 / 3, 0.0};
 
 SDLInterface::SDLInterface(Config *config, Controller *controller) {
   m_config = config;
@@ -62,15 +66,12 @@ void SDLInterface::init() {
 
   // m_openGL->init();
 
-  float initTriangle[] = {0.5, -0.5, 0.0, -0.5, -0.5, 0.0, 0.0, 1.0, 0.0};
-  GLfloat vertices[] = {0.5, -0.5, 0.0, -0.5, -0.5, 0.0, 0.0, 1.0, 0.0};
-
   const char *vsSource = m_config->vertexShader();
   const char *fsSource = m_config->fragmentShader();
   m_openGL->addVertexShader(vsSource);
   m_openGL->addFragmentShader(fsSource);
   m_openGL->compileProgram();
-  m_openGL->addTriangle(initTriangle, 9);
+  m_openGL->addVertexStream(initTriangle, 12);
 }
 
 int SDLInterface::tick(int &state) {
@@ -106,6 +107,12 @@ int SDLInterface::tick(int &state) {
 }
 
 int SDLInterface::draw() {
+  Uint32 ticks = SDL_GetTicks();
+  const float pi = acos(-1);
+  float tickAngle = ticks * (2 * pi) / 1000;
+  m_openGL->background(backColour);
+  m_openGL->setUniform4F("time", sin(tickAngle), sin(tickAngle + (2 * pi / 3)),
+                         sin(tickAngle + (4 * pi / 3)), 0.0f);
   m_openGL->draw();
   return STATE_MAIN;
 }
@@ -115,14 +122,9 @@ int SDLInterface::fadeIn(float time, int &state) {
   if (backColour > 0.8 - delta)
     backColour = 0.8 - delta;
   backColour += delta;
-  // SDL_SetRenderDrawColor(m_renderer, backColour, backColour, backColour,
-  // backColour);
-  // SDL_RenderFillRect(m_renderer, nullptr);
 
-  glClearColor(backColour, backColour, backColour, backColour);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  m_openGL->draw();
+  m_openGL->background(backColour);
+  draw();
   if (backColour >= 0.8) {
     return STATE_MAIN;
   }
@@ -139,10 +141,10 @@ int SDLInterface::fadeOut(float time, int &state) {
   // 255);
   // SDL_RenderFillRect(m_renderer, nullptr);
 
-  glClearColor(backColour, backColour, backColour, backColour);
-  glClear(GL_COLOR_BUFFER_BIT);
+  m_openGL->background(backColour);
+  m_openGL->addVertexStream(finalTriangle, 12);
 
-  m_openGL->draw();
+  draw();
   if (backColour <= delta) {
     return STATE_EXIT;
   }

@@ -1,45 +1,48 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "conf.h"
-#include "SDL_interface.h"
 #include <string>
 
+#include "SDL_interface.h"
+#include "conf.h"
+//#include "entities.h"
+
 enum State {
-    STATE_EXIT = 0,
-    STATE_FADE_IN,
-    STATE_FADE_OUT,
-    STATE_WAIT,
-    STATE_MAIN,
-    STATE_BLANK = 255
+  STATE_EXIT = 0,
+  STATE_FADE_IN,
+  STATE_FADE_OUT,
+  STATE_WAIT,
+  STATE_MAIN,
+  STATE_BLANK = 255
 };
 
-enum LemonError {
-    LEMON_SDL_ERROR
-};
+enum LemonError { LEMON_SDL_ERROR };
 
 class conf;
 class SDLInterface;
+class EntityTable;
 
-class controller
-{
-  public:
-    controller(std::string);
-    ~controller();
+class controller {
+public:
+  controller(std::string);
+  ~controller();
 
-    int loop();
-    int exit();
+  int loop();
+  int exit();
 
-    void input(char);
+  void input(char);
 
-    unsigned int timeLeft(unsigned int);
-  private:
-    int loopState;
-    int SDLState;
+  unsigned int timeLeft(unsigned int);
 
-    int oldTicks;
+private:
+  int loopState;
+  int SDLState;
 
-    conf* config;
-    SDLInterface* SDL;
+  int oldTicks;
+
+  conf *config;
+  SDLInterface *SDL;
+
+  EntityTable *entities;
 };
-#endif //CONTROLLER_H
+#endif // CONTROLLER_H
