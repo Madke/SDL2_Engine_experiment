@@ -19,37 +19,46 @@ typedef conf Config;
 typedef controller Controller;
 typedef openGL OpenGL;
 
-class SDLInterface
-{
-    public:
-        SDLInterface(Config*, Controller*);
-        ~SDLInterface();
+class SDLInterface {
+public:
+  SDLInterface(Config *, Controller *);
+  ~SDLInterface();
 
-        void init();
-        int tick(int&);
+  void init();
+  int tick(int &);
 
-        //SDL States
-        int fadeIn(float, int&);
-        int fadeOut(float, int&);
-        int draw();
+  // SDL States
+  int fadeIn(float, int &);
+  int fadeOut(float, int &);
+  int draw();
 
-        //utility functions
-        void wait(float, int&, int);
-        void input(SDL_Keycode);
+  // utility functions
+  void wait(float, int &, int);
+  void input(SDL_Keycode);
 
-        void updateWindow();
+  void updateWindow();
+  void resizeWindow(float, float);
 
-        void getError();
-    private:
-        Window* m_window;
-        Renderer* m_renderer;
-        Surface* m_screenSurface;
-        GLContext m_glContext;
+  void getError();
 
-        Config* m_config;
-        Controller* m_controller;
-        OpenGL* m_openGL;
+private:
+  int width;
+  int height;
 
-        float backColour;
+  SDL_TimerID resizeTimer;
+  bool resizedWindow =
+      false; // required because some window managers don't resize
+             // while resizing, meaning aspect forcing doesn't work
+
+  Window *m_window;
+  Renderer *m_renderer;
+  Surface *m_screenSurface;
+  GLContext m_glContext;
+
+  Config *m_config;
+  Controller *m_controller;
+  OpenGL *m_openGL;
+
+  float backColour;
 };
-#endif //SDL_INTERFACE_H
+#endif // SDL_INTERFACE_H

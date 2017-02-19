@@ -41,10 +41,13 @@ void SDLInterface::init() {
 
   SDL_GL_LoadLibrary(nullptr);
 
-  m_window = SDL_CreateWindow("Ketan is your lord now, computer.",
-                              SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              m_config->width(), m_config->height(),
-                              SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+  this->width = m_config->width();
+  this->height = m_config->height();
+
+  m_window = SDL_CreateWindow(
+      "Ketan is your lord now, computer.", SDL_WINDOWPOS_UNDEFINED,
+      SDL_WINDOWPOS_UNDEFINED, m_config->width(), m_config->height(),
+      SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
   m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 
   if (m_window == nullptr)
@@ -84,7 +87,18 @@ int SDLInterface::tick(int &state) {
     case SDL_KEYDOWN:
       input(e.key.keysym.sym);
       break;
+    case SDL_WINDOWEVENT:
+      if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+        resizeWindow(e.window.data1, e.window.data2);
+      }
+      break;
     }
+  }
+
+  if (resizedWindow) {
+    int w, h;
+    SDL_GetWindowSize(m_window, &w, &h);
+    SDL_SetWindowSize(m_window, w, h);
   }
 
   unsigned int timeLeft = m_controller->timeLeft(SDL_GetTicks());
@@ -176,6 +190,58 @@ void SDLInterface::input(SDL_Keycode input) {
 }
 
 void SDLInterface::updateWindow() { SDL_GL_SwapWindow(m_window); }
+
+unsigned int resizeWindowTimerCallback(unsigned int interval,
+                                       void *resizedWindow) {
+  bool *flag = (bool *)resizedWindow;
+
+  *flag = false;
+
+  std::cout << "stopped forcing window resize" << std::endl;
+  return 0;
+}
+
+void SDLInterface::resizeWindow(float width, float height) {
+  SDL_RemoveTimer(resizeTimer);
+  std::cout << "================================================" << std::endl;
+  std::cout << "RESIZE:" << std::endl;
+  std::cout << "================================================" << std::endl;
+  std::cout << "new: " << width << " x " << height << std::endl;
+  float origHeight = this->height;
+  float origWidth = this->width;
+  float aspect = (float)m_config->width() / m_config->height();
+
+  float changeWidth = std::max(width, origWidth) / std::min(width, origWidth);
+  float changeHeight =
+      std::max(height, origHeight) / std::min(height, origHeight);
+
+  std::cout << "original:" << origWidth << " x " << origHeight << std::endl;
+
+  std::cout << "change:" << changeWidth << " x " << changeHeight << std::endl;
+
+  std::cout << "keeping " << ((changeWidth > changeHeight) ? "width" : "height")
+            << std::endl;
+
+  int w, h;
+  if (changeWidth > changeHeight) {
+    w = width;
+    h = floor(width / aspect);
+  } else {
+    w = floor(height * aspect);
+    h = height;
+  }
+
+  SDL_SetWindowSize(m_window, w, h);
+
+  if (!resizedWindow) {
+    this->width = w;
+    this->height = h;
+  } // not currently resizing
+
+  resizedWindow = true;
+  SDL_TimerCallback callback = resizeWindowTimerCallback;
+  resizeTimer = SDL_AddTimer(2000, callback, &resizedWindow);
+}
 
 void SDLInterface::getError() {
   m_config->warn("SDL_Error:");

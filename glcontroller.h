@@ -18,16 +18,18 @@ public:
   void addFragmentShader(const char *);
   void compileProgram();
 
-  void addTriangle(float *, unsigned int);
+  void addVertexStream(float *, unsigned int);
 
+  void setUniform4F(const char *name, float x, float y, float z, float w);
+  void background(float);
   void draw();
   Config *m_config;
 
-  GLuint VBO;
-  GLuint VAO;
-  GLuint vertexShader;
-  GLuint fragmentShader;
-  GLuint shaderProgram;
+  GLuint VBO = 0;
+  GLuint VAO = 0;
+  GLuint vertexShader = 0;
+  GLuint fragmentShader = 0;
+  GLuint shaderProgram = 0;
 };
 
 #endif // GLCONTROLLER_H
