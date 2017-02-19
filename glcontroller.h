@@ -22,6 +22,8 @@ public:
 
   void setUniform4F(const char *name, float x, float y, float z, float w);
   void background(float);
+
+  void windowResize(int, int);
   void draw();
   Config *m_config;
 

@@ -99,6 +99,7 @@ int SDLInterface::tick(int &state) {
     int w, h;
     SDL_GetWindowSize(m_window, &w, &h);
     SDL_SetWindowSize(m_window, w, h);
+    m_openGL->windowResize(w, h);
   }
 
   unsigned int timeLeft = m_controller->timeLeft(SDL_GetTicks());

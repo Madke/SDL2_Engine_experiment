@@ -89,6 +89,8 @@ void openGL::setUniform4F(const char *name, float x, float y, float z,
   glUniform4f(vertexColorLocation, x, y, z, w);
 }
 
+void openGL::windowResize(int w, int h) { glViewport(0, 0, w, h); }
+
 void openGL::draw() {
   glUseProgram(shaderProgram);
 
